@@ -20,9 +20,9 @@ Dino::Dino(int floorHeight) {
   sprites.sneaking2.setTexture(textures.sneaking2);
   sprites.dead.setTexture(textures.dead);
 
-  position = {10, 0};
+  position = {10, (float)floorHeight - dimensions.walking.y};
   velocity = 0;
-  acceleration = 0.18;
+  acceleration = 0.8;
 
   isAlive = true;
   isSneaking = false;
@@ -48,7 +48,8 @@ void Dino::update() {
 }
 
 void Dino::draw(sf::RenderWindow &window, int frame) {
-  if (frame % 100 < 50) {
+  int framerate = 20;
+  if (frame % framerate < framerate / 2) {
     if (isSneaking) {
       sprites.sneaking1.setPosition(position);
       window.draw(sprites.sneaking1);
@@ -68,7 +69,7 @@ void Dino::draw(sf::RenderWindow &window, int frame) {
 }
 
 void Dino::jump() {
-  velocity = -10;
+  velocity = -17;
   isJumping = true;
 }
 
