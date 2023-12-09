@@ -7,7 +7,7 @@ option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 
 # Custom libraries
 file(GLOB_RECURSE LIB_SOURCES CONFIGURE_DEPENDS "libs/*.hpp" "libs/*.cpp" )
-include_directories(${CMAKE_SOURCE_DIR}/libs/)
+include_directories(${CMAKE_SOURCE_DIR})
 include_directories (/usr/include/freetype2)
 
 add_library(nn

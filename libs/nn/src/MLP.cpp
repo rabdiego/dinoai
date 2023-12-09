@@ -1,4 +1,4 @@
-#include "nn/include/MLP.hpp"
+#include "libs/nn/include/MLP.hpp"
 
 using namespace NN;
 

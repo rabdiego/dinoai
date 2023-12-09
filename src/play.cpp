@@ -1,11 +1,11 @@
-#include "SFML/Graphics/Color.hpp"
-#include "SFML/Graphics/RenderWindow.hpp"
-#include "SFML/Window/Event.hpp"
-#include "SFML/Window/VideoMode.hpp"
+#include "libs/dino/include/dino.hpp"
 #include <SFML/Graphics.hpp>
 
 int main() {
-  sf::RenderWindow window(sf::VideoMode(500, 500), "Teste");
+  sf::RenderWindow window(sf::VideoMode(800, 400), "Play");
+
+  DinoAI::Dino player(350);
+  int frame = 0;
 
   while (window.isOpen()) {
     sf::Event event;
@@ -13,9 +13,26 @@ int main() {
       if (event.type == sf::Event::Closed) {
         window.close();
       }
-
-      window.clear(sf::Color::Black);
-      window.display();
+      if (player.isAlive) {
+        if (event.type == sf::Event::KeyPressed) {
+          if (event.key.code == sf::Keyboard::W && player.isSneaking == false) {
+            player.jump();
+          } else if (event.key.code == sf::Keyboard::S &&
+                     player.isJumping == false) {
+            player.sneak();
+          }
+        } else if (event.type == sf::Event::KeyReleased) {
+          if (event.key.code == sf::Keyboard::S && player.isSneaking == true) {
+            player.standUp();
+          }
+        }
+      }
     }
+
+    window.clear(sf::Color::White);
+    player.update();
+    player.draw(window, frame);
+    window.display();
+    frame++;
   }
 }
