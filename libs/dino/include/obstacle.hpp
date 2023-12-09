@@ -1,3 +1,4 @@
+#include "libs/dino/include/dino.hpp"
 #include <SFML/Graphics.hpp>
 
 #ifndef Obstacle_H
@@ -35,26 +36,28 @@ typedef struct {
   sf::Vector2u cactae3;
   sf::Vector2u ptero;
 } ObstacleDimensions;
-
 /**
-* Obstacle class
-**/
+ * Obstacle class
+ **/
 class Obstacle {
 private:
   ObstacleTextures textures;
   ObstacleSprites sprites;
   ObstacleDimensions dimensions;
-  
+
   sf::Vector2f position;
 
   int floorHeight;
   int id;
+
 public:
+  sf::Rect<float> rect;
   Obstacle(int id, int floorHeight, int skyHeight);
 
   void update(float gameVelocity);
   void draw(sf::RenderWindow &window, int frame);
-  
+  bool collidedWithDino(DinoAI::Dino dino);
+
   sf::Vector2f getPosition();
 };
 }; // namespace DinoAI

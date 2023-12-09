@@ -24,6 +24,9 @@ Dino::Dino(int floorHeight) {
   velocity = 0;
   acceleration = 0.8;
 
+  rect = sf::Rect<float>(position.x, position.y, textures.walking1.getSize().x,
+                         textures.walking1.getSize().y);
+
   isAlive = true;
   isSneaking = false;
   isJumping = false;
@@ -34,37 +37,51 @@ Dino::Dino(int floorHeight) {
 void Dino::update() {
   velocity += acceleration;
   position.y += velocity;
+  rect.top = position.y;
 
   if (isSneaking && position.y >= floorHeight - dimensions.sneaking.y) {
     isJumping = false;
     position.y = floorHeight - dimensions.sneaking.y;
+    rect.top = position.y;
+    rect.height = textures.walking1.getSize().y;
+
   } else if (isAlive && position.y >= floorHeight - dimensions.walking.y) {
     isJumping = false;
     position.y = floorHeight - dimensions.walking.y;
+    rect.top = position.y;
+    rect.height = textures.walking1.getSize().y;
+
   } else if (!isAlive && position.y >= floorHeight - dimensions.dead.y) {
     isJumping = false;
     position.y = floorHeight - dimensions.dead.y;
+    rect.top = position.y;
+    rect.height = textures.sneaking1.getSize().y;
   }
 }
 
 void Dino::draw(sf::RenderWindow &window, int frame) {
   int framerate = 20;
-  if (frame % framerate < framerate / 2) {
-    if (isSneaking) {
-      sprites.sneaking1.setPosition(position);
-      window.draw(sprites.sneaking1);
+  if (isAlive) {
+    if (frame % framerate < framerate / 2) {
+      if (isSneaking) {
+        sprites.sneaking1.setPosition(position);
+        window.draw(sprites.sneaking1);
+      } else {
+        sprites.walking1.setPosition(position);
+        window.draw(sprites.walking1);
+      }
     } else {
-      sprites.walking1.setPosition(position);
-      window.draw(sprites.walking1);
+      if (isSneaking) {
+        sprites.sneaking2.setPosition(position);
+        window.draw(sprites.sneaking2);
+      } else {
+        sprites.walking2.setPosition(position);
+        window.draw(sprites.walking2);
+      }
     }
   } else {
-    if (isSneaking) {
-      sprites.sneaking2.setPosition(position);
-      window.draw(sprites.sneaking2);
-    } else {
-      sprites.walking2.setPosition(position);
-      window.draw(sprites.walking2);
-    }
+    sprites.dead.setPosition(position);
+    window.draw(sprites.dead);
   }
 }
 
@@ -84,3 +101,8 @@ void Dino::standUp() {
 }
 
 void Dino::die() { isAlive = false; }
+
+void Dino::reborn() {
+  isAlive = true;
+  position.y = (float)floorHeight - dimensions.walking.y;
+}

@@ -1,3 +1,4 @@
+#include "SFML/Graphics/Rect.hpp"
 #include "libs/nn/include/MLP.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Vector2.hpp>
@@ -57,6 +58,8 @@ private:
   int floorHeight;
 
 public:
+  sf::Rect<float> rect;
+
   bool isAlive;
   bool isSneaking;
   bool isJumping;
@@ -89,6 +92,7 @@ public:
   void sneak();
   void standUp();
   void die();
+  void reborn();
 };
 }; // namespace DinoAI
 
