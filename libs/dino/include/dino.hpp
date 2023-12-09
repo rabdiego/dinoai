@@ -16,7 +16,7 @@ typedef struct {
   sf::Texture sneaking1;
   sf::Texture sneaking2;
   sf::Texture dead;
-} Textures;
+} DinoTextures;
 
 /**
  * Auxiliar struct to storage sprites
@@ -27,7 +27,7 @@ typedef struct {
   sf::Sprite sneaking1;
   sf::Sprite sneaking2;
   sf::Sprite dead;
-} Sprites;
+} DinoSprites;
 
 /**
  * Auxiliar struct to storage texture dimensions
@@ -36,7 +36,7 @@ typedef struct {
   sf::Vector2u walking;
   sf::Vector2u sneaking;
   sf::Vector2u dead;
-} Dimensions;
+} DinoDimensions;
 
 /**
   * Player class
@@ -46,9 +46,9 @@ typedef struct {
   **/
 class Dino {
 private:
-  Textures textures;
-  Sprites sprites;
-  Dimensions dimensions;
+  DinoTextures textures;
+  DinoSprites sprites;
+  DinoDimensions dimensions;
 
   sf::Vector2f position;
   float velocity;

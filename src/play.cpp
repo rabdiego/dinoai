@@ -1,11 +1,14 @@
 #include "libs/dino/include/dino.hpp"
+#include "libs/dino/include/obstacle.hpp"
 #include <SFML/Graphics.hpp>
+#include <vector>
 
 int main() {
   sf::RenderWindow window(sf::VideoMode(800, 400), "Play");
   window.setFramerateLimit(60);
 
   DinoAI::Dino player(350);
+  std::vector <DinoAI::Obstacle*> obstacles;
   int frame = 0;
 
   while (window.isOpen()) {
@@ -31,9 +34,27 @@ int main() {
       }
     }
 
+    if (frame % 100 == 0) {
+      obstacles.push_back(new DinoAI::Obstacle(3, 350, 250));
+    }
+
     window.clear(sf::Color::White);
+
     player.update();
     player.draw(window, frame);
+
+    int obsIdx = 0;
+    for (auto& obstacle : obstacles) {
+      obstacle->update(9);
+      obstacle->draw(window, frame);
+
+      if (obstacle->getPosition().x < -80) {
+        obstacles.erase(obstacles.begin() + obsIdx);
+      }
+
+      obsIdx++;
+    }
+
     window.display();
     frame++;
   }
