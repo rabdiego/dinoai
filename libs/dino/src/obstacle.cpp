@@ -27,27 +27,32 @@ Obstacle::Obstacle(int id, int floorHeight, int skyHeight) {
   switch (id) {
   case 0:
     position.y = (float)floorHeight - dimensions.cactae1.y;
-    rect = sf::Rect<float>(position.x + 10, position.y, textures.cactae1.getSize().x - 10,
+    rect = sf::Rect<float>(position.x + 10, position.y,
+                           textures.cactae1.getSize().x - 10,
                            textures.cactae1.getSize().y);
     break;
   case 1:
     position.y = (float)floorHeight - dimensions.cactae2.y;
-    rect = sf::Rect<float>(position.x + 10, position.y, textures.cactae2.getSize().x - 10,
+    rect = sf::Rect<float>(position.x + 10, position.y,
+                           textures.cactae2.getSize().x - 10,
                            textures.cactae2.getSize().y);
     break;
   case 2:
     position.y = (float)floorHeight - dimensions.cactae3.y;
-    rect = sf::Rect<float>(position.x + 10, position.y, textures.cactae3.getSize().x - 10,
+    rect = sf::Rect<float>(position.x + 10, position.y,
+                           textures.cactae3.getSize().x - 10,
                            textures.cactae3.getSize().y);
     break;
   case 3:
     position.y = (float)skyHeight - dimensions.ptero.y;
-    rect = sf::Rect<float>(position.x + 10, position.y, textures.ptero2.getSize().x - 10,
+    rect = sf::Rect<float>(position.x + 10, position.y,
+                           textures.ptero2.getSize().x - 10,
                            textures.ptero2.getSize().y);
     break;
   default:
     position.y = (float)floorHeight - dimensions.cactae1.y;
-    rect = sf::Rect<float>(position.x + 10, position.y, textures.cactae1.getSize().x - 10,
+    rect = sf::Rect<float>(position.x + 10, position.y,
+                           textures.cactae1.getSize().x - 10,
                            textures.cactae1.getSize().y);
     break;
   }
@@ -90,9 +95,9 @@ void Obstacle::draw(sf::RenderWindow &window, int frame) {
   }
 }
 
-sf::Vector2f Obstacle::getPosition() { return position; }
+sf::Vector2f Obstacle::getPosition() const { return position; }
 
-bool Obstacle::collidedWithDino(DinoAI::Dino dino) {
+bool Obstacle::collidedWithDino(DinoAI::Dino dino) const {
   if (rect.intersects(dino.rect)) {
     return true;
   }

@@ -12,6 +12,8 @@ MLP::MLP(int num_input_neurons, int num_hidden_neurons,
   this->num_hidden_neurons = num_hidden_neurons;
   this->num_output_neurons = num_output_neurons;
 
+  arma::arma_rng::set_seed_random();
+
   this->hidden_weights =
       arma::mat(num_hidden_neurons, num_input_neurons).randn();
   this->output_weights =
@@ -39,10 +41,10 @@ void MLP::mutation(double factor) {
   this->output_weights += output_mutation;
 }
 
-double MLP::feedForward(arma::mat input) const {
+int MLP::feedForward(arma::mat input) const {
   arma::mat hidden_vector = this->sigmoid(this->hidden_weights * input);
   arma::mat output_vector = this->output_weights * hidden_vector;
-  return output_vector(output_vector.index_max());
+  return (int) output_vector(output_vector.index_max());
 }
 
 arma::mat MLP::getHiddenWeights() const { return this->hidden_weights; }

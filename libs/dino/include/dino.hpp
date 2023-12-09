@@ -55,14 +55,13 @@ private:
   float velocity;
   float acceleration;
 
-  int floorHeight;
-
 public:
   sf::Rect<float> rect;
 
   bool isAlive;
   bool isSneaking;
   bool isJumping;
+  int floorHeight;
 
   /**
   * Class constructor, that takes the floor y coordinate as its only parameter
@@ -70,11 +69,12 @@ public:
   * @param floorHeight scene's floor y coordinate
   */
   Dino(int floorHeight);
+  Dino();
 
   /**
   * Update method - this method will be called in every frame during the game loop
   */
-  void update();
+  virtual void update();
 
   /**
   * Draw method

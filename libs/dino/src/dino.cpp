@@ -34,6 +34,8 @@ Dino::Dino(int floorHeight) {
   this->floorHeight = floorHeight;
 }
 
+Dino::Dino() {}
+
 void Dino::update() {
   velocity += acceleration;
   position.y += velocity;

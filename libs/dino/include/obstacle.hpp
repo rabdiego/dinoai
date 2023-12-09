@@ -90,14 +90,14 @@ public:
   * @param dino Dino object
   * @returns boolean telling if the obstacle collided with the dino
   */
-  bool collidedWithDino(DinoAI::Dino dino);
+  bool collidedWithDino(DinoAI::Dino dino) const;
 
   /**
   * Method used to get the obstacle's position
   *
   * @returns the obstacle's position
   */
-  sf::Vector2f getPosition();
+  sf::Vector2f getPosition() const;
 };
 }; // namespace DinoAI
 

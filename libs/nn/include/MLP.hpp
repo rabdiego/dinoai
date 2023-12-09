@@ -66,7 +66,7 @@ public:
    *
    * @param input an armadillo matrix (that is conceptually a vector)
    */
-  double feedForward(arma::mat input) const;
+  int feedForward(arma::mat input) const;
 
   // Getters and setters
 
