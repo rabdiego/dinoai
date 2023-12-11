@@ -3,7 +3,6 @@
 #include "libs/dino/include/obstacle.hpp"
 #include <SFML/Graphics.hpp>
 #include <random>
-#include <vector>
 
 int main() {
   sf::RenderWindow window(sf::VideoMode(800, 400), "Play");
@@ -61,7 +60,7 @@ int main() {
       }
     }
 
-    if (gameVelocity <= 30 && frame % 500 == 0) {
+    if (gameVelocity <= 25 && frame % 500 == 0) {
       gameVelocity += 5;
     }
 

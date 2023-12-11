@@ -63,7 +63,7 @@ int main() {
       }
     }
 
-    if (gameVelocity <= 30 && frame % 500 == 0) {
+    if (gameVelocity <= 25 && frame % 500 == 0) {
       gameVelocity += 5;
     }
 
