@@ -18,6 +18,7 @@ private:
   sf::Vector2f position;
 
   int floorHeight;
+  int skyHeight;
   int id;
 
 public:
@@ -53,6 +54,8 @@ public:
   * @param frame Current frame
   */
   void draw(sf::RenderWindow &window, int frame);
+
+  void reborn(int id);
 
   /**
   * Method used to check collision with a Dino class object

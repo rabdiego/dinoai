@@ -32,20 +32,20 @@ int main() {
   obstacleTextures.ptero1.loadFromFile("assets/obstacles/ptero1.png");
   obstacleTextures.ptero2.loadFromFile("assets/obstacles/ptero2.png");
 
-  int numberOfBots = 50;
+  int numberOfBots = 500;
   std::vector<DinoAI::Bot *> bots;
 
   for (int i = 0; i < numberOfBots; i++) {
     bots.push_back(new DinoAI::Bot(350, &dinoTextures));
   }
 
-  std::vector<DinoAI::Obstacle *> obstacles;
   int frame = 0;
-  int gameVelocity = 7;
+  int gameVelocity = 5;
 
   std::random_device dev;
   std::mt19937 rng(dev());
   std::uniform_int_distribution<std::mt19937::result_type> rng3(0, 3);
+  DinoAI::Obstacle obstacle(rng3(rng), 350, 260, &obstacleTextures);
 
   while (window.isOpen()) {
     // Handling events
@@ -57,19 +57,14 @@ int main() {
         for (int i = 0; i < numberOfBots; i++) {
           bots.push_back(new DinoAI::Bot(350, &dinoTextures));
         }
-        obstacles = std::vector<DinoAI::Obstacle *>();
+        obstacle.reborn(rng3(rng));
         gameVelocity = 7;
         frame = 0;
       }
     }
 
-    // Appending a new obstacle
-    if (frame % 100 == 0) {
-      obstacles.push_back(new DinoAI::Obstacle(rng3(rng), 350, 270, &obstacleTextures));
-    }
-
-    if (frame % 1000 == 0) {
-      gameVelocity += 2;
+    if (gameVelocity <= 30 && frame % 500 == 0) {
+      gameVelocity += 5;
     }
 
     // Clearing the window
@@ -79,40 +74,34 @@ int main() {
       arma::mat input = arma::mat(8, 1);
       input[0] = bot->rect.top / 400;
       input[1] = bot->rect.height / 96;
-      input[2] = obstacles[0]->rect.left / 800;
-      input[3] = obstacles[0]->rect.top / 400;
-      input[4] = obstacles[0]->rect.width / 120;
-      input[5] = obstacles[0]->rect.height / 90;
+      input[2] = obstacle.rect.left / 800;
+      input[3] = obstacle.rect.top / 280;
+      input[4] = obstacle.rect.width / 104;
+      input[5] = obstacle.rect.height / 100;
       input[6] =
-          (obstacles[0]->rect.top + obstacles[0]->rect.height - 350) / 70;
-      input[7] = (double)gameVelocity / 17;
+          (350 - obstacle.rect.top + obstacle.rect.height) / 220;
+      input[7] = (double)gameVelocity / 30;
 
       bot->update(input);
       bot->draw(window, frame);
     }
 
-    // Updating and drawing the obstacles
-    int obsIdx = 0;
-    for (auto &obstacle : obstacles) {
-      obstacle->update(gameVelocity);
-      obstacle->draw(window, frame);
+    // Updating and drawing the obstacle
+    obstacle.update(gameVelocity);
+    obstacle.draw(window, frame);
 
-      int botIdx = 0;
-      for (auto &bot : bots) {
-        if (obstacle->collidedWithDino(*bot)) {
-          bot->die();
-          bots.erase(bots.begin() + botIdx);
-          botIdx--;
-        }
-        botIdx++;
+    int botIdx = 0;
+    for (auto &bot : bots) {
+      if (obstacle.collidedWithDino(*bot)) {
+        bot->die();
+        bots.erase(bots.begin() + botIdx);
+        botIdx--;
       }
+      botIdx++;
+    }
 
-      if (obstacle->getPosition().x < -80) {
-        obstacles.erase(obstacles.begin() + obsIdx);
-        obsIdx--;
-      }
-
-      obsIdx++;
+    if (obstacle.getPosition().x < -80) {
+      obstacle.reborn(rng3(rng));
     }
 
     if (allBotsDead(bots)) {

@@ -2,7 +2,8 @@
 
 using namespace DinoAI;
 
-Obstacle::Obstacle(int id, int floorHeight, int skyHeight, ObstacleTextures* textures) {
+Obstacle::Obstacle(int id, int floorHeight, int skyHeight,
+                   ObstacleTextures *textures) {
   this->textures = textures;
 
   dimensions.cactae1 = textures->cactae1.getSize();
@@ -17,6 +18,7 @@ Obstacle::Obstacle(int id, int floorHeight, int skyHeight, ObstacleTextures* tex
   sprites.ptero2.setTexture(textures->ptero2);
 
   this->floorHeight = floorHeight;
+  this->skyHeight = skyHeight;
   this->id = id;
   position.x = 880;
 
@@ -98,4 +100,42 @@ bool Obstacle::collidedWithDino(DinoAI::Dino dino) const {
     return true;
   }
   return false;
+}
+
+void Obstacle::reborn(int id) {
+  this->id = id;
+  position.x = 880;
+
+  switch (id) {
+  case 0:
+    position.y = (float)floorHeight - dimensions.cactae1.y;
+    rect = sf::Rect<float>(position.x + 10, position.y,
+                           textures->cactae1.getSize().x - 10,
+                           textures->cactae1.getSize().y);
+    break;
+  case 1:
+    position.y = (float)floorHeight - dimensions.cactae2.y;
+    rect = sf::Rect<float>(position.x + 10, position.y,
+                           textures->cactae2.getSize().x - 10,
+                           textures->cactae2.getSize().y);
+    break;
+  case 2:
+    position.y = (float)floorHeight - dimensions.cactae3.y;
+    rect = sf::Rect<float>(position.x + 10, position.y,
+                           textures->cactae3.getSize().x - 10,
+                           textures->cactae3.getSize().y);
+    break;
+  case 3:
+    position.y = (float)skyHeight - dimensions.ptero.y;
+    rect = sf::Rect<float>(position.x + 10, position.y,
+                           textures->ptero2.getSize().x - 10,
+                           textures->ptero2.getSize().y);
+    break;
+  default:
+    position.y = (float)floorHeight - dimensions.cactae1.y;
+    rect = sf::Rect<float>(position.x + 10, position.y,
+                           textures->cactae1.getSize().x - 10,
+                           textures->cactae1.getSize().y);
+    break;
+  }
 }

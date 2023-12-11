@@ -84,7 +84,7 @@ void Dino::draw(sf::RenderWindow &window, int frame) {
 }
 
 void Dino::jump() {
-  velocity = -17;
+  velocity = -15;
   isJumping = true;
 }
 

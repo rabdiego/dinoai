@@ -24,14 +24,13 @@ int main() {
   obstacleTextures.ptero2.loadFromFile("assets/obstacles/ptero2.png");
 
   DinoAI::Dino player(350, &dinoTextures);
-  std::vector<DinoAI::Obstacle *> obstacles;
   int frame = 0;
   int gameVelocity = 5;
 
   std::random_device dev;
   std::mt19937 rng(dev());
   std::uniform_int_distribution<std::mt19937::result_type> rng3(0, 3);
-  obstacles.push_back(new DinoAI::Obstacle(rng3(rng), 350, 270, &obstacleTextures));
+  DinoAI::Obstacle obstacle(3, 350, 260, &obstacleTextures);
 
   while (window.isOpen()) {
     // Handling events
@@ -56,19 +55,13 @@ int main() {
         }
       } else if (event.key.code == sf::Keyboard::Space) {
         player.reborn();
-        obstacles = std::vector<DinoAI::Obstacle *>();
-        obstacles.push_back(new DinoAI::Obstacle(rng3(rng), 350, 270, &obstacleTextures));
+        obstacle.reborn(rng3(rng));
         gameVelocity = 5;
         frame = 0;
       }
     }
 
-    // Appending a new obstacle
-    if (obstacles[0]->getPosition().x < -80) {
-      obstacles.push_back(new DinoAI::Obstacle(rng3(rng), 350, 270, &obstacleTextures));
-    }
-
-    if (frame % 500 == 0) {
+    if (gameVelocity <= 30 && frame % 500 == 0) {
       gameVelocity += 5;
     }
 
@@ -79,22 +72,17 @@ int main() {
     player.update();
     player.draw(window, frame);
 
-    // Updating and drawing the obstacles
-    int obsIdx = 0;
-    for (auto &obstacle : obstacles) {
-      obstacle->update(gameVelocity);
-      obstacle->draw(window, frame);
+    // Updating and drawing the obstacle
+    obstacle.update(gameVelocity);
+    obstacle.draw(window, frame);
 
-      if (obstacle->collidedWithDino(player)) {
-        player.die();
-        gameVelocity = 0;
-      }
+    if (obstacle.collidedWithDino(player)) {
+      player.die();
+      gameVelocity = 0;
+    }
 
-      if (obstacle->getPosition().x < -80) {
-        obstacles.erase(obstacles.begin() + obsIdx);
-      }
-
-      obsIdx++;
+    if (obstacle.getPosition().x < -80) {
+      obstacle.reborn(rng3(rng));
     }
 
     window.display();
