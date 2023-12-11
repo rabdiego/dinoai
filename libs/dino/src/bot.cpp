@@ -2,9 +2,11 @@
 
 using namespace DinoAI;
 
-Bot::Bot(int floorHeight) : Dino(floorHeight) { brain = new NN::MLP(8, 16, 3); }
+Bot::Bot(int floorHeight, DinoTextures* textures) : Dino(floorHeight, textures) {
+  brain = new NN::MLP(8, 16, 3);
+}
 
-Bot::Bot(const Bot &parent) : Dino(parent.floorHeight) {
+Bot::Bot(const Bot &parent) : Dino(parent.floorHeight, parent.textures) {
   brain = new NN::MLP(*parent.brain);
   brain->mutation(0.1);
 }

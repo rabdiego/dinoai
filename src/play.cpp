@@ -9,14 +9,29 @@ int main() {
   sf::RenderWindow window(sf::VideoMode(800, 400), "Play");
   window.setFramerateLimit(60);
 
-  DinoAI::Dino player(350);
+  DinoAI::DinoTextures dinoTextures;
+  dinoTextures.walking1.loadFromFile("assets/dino/walking1.png");
+  dinoTextures.walking2.loadFromFile("assets/dino/walking2.png");
+  dinoTextures.sneaking1.loadFromFile("assets/dino/sneaking1.png");
+  dinoTextures.sneaking2.loadFromFile("assets/dino/sneaking2.png");
+  dinoTextures.dead.loadFromFile("assets/dino/dead.png");
+
+  DinoAI::ObstacleTextures obstacleTextures;
+  obstacleTextures.cactae1.loadFromFile("assets/obstacles/cactae1.png");
+  obstacleTextures.cactae2.loadFromFile("assets/obstacles/cactae2.png");
+  obstacleTextures.cactae3.loadFromFile("assets/obstacles/cactae3.png");
+  obstacleTextures.ptero1.loadFromFile("assets/obstacles/ptero1.png");
+  obstacleTextures.ptero2.loadFromFile("assets/obstacles/ptero2.png");
+
+  DinoAI::Dino player(350, &dinoTextures);
   std::vector<DinoAI::Obstacle *> obstacles;
   int frame = 0;
-  int gameVelocity = 7;
+  int gameVelocity = 5;
 
   std::random_device dev;
   std::mt19937 rng(dev());
   std::uniform_int_distribution<std::mt19937::result_type> rng3(0, 3);
+  obstacles.push_back(new DinoAI::Obstacle(rng3(rng), 350, 270, &obstacleTextures));
 
   while (window.isOpen()) {
     // Handling events
@@ -42,18 +57,19 @@ int main() {
       } else if (event.key.code == sf::Keyboard::Space) {
         player.reborn();
         obstacles = std::vector<DinoAI::Obstacle *>();
-        gameVelocity = 7;
+        obstacles.push_back(new DinoAI::Obstacle(rng3(rng), 350, 270, &obstacleTextures));
+        gameVelocity = 5;
         frame = 0;
       }
     }
 
     // Appending a new obstacle
-    if (frame % 100 == 0) {
-      obstacles.push_back(new DinoAI::Obstacle(rng3(rng), 350, 270));
+    if (obstacles[0]->getPosition().x < -80) {
+      obstacles.push_back(new DinoAI::Obstacle(rng3(rng), 350, 270, &obstacleTextures));
     }
 
-    if (frame % 1000 == 0) {
-      gameVelocity += 2;
+    if (frame % 500 == 0) {
+      gameVelocity += 5;
     }
 
     // Clearing the window

@@ -1,4 +1,5 @@
 #include "SFML/Graphics/Rect.hpp"
+#include "libs/dino/include/structures.hpp"
 #include "libs/nn/include/MLP.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Vector2.hpp>
@@ -9,45 +10,13 @@
 
 namespace DinoAI {
 /**
- * Auxiliar struct to storage textures
+ * Player class
+ *
+ * The AI bot will inherit this class, and override
+ * the update function
  **/
-typedef struct {
-  sf::Texture walking1;
-  sf::Texture walking2;
-  sf::Texture sneaking1;
-  sf::Texture sneaking2;
-  sf::Texture dead;
-} DinoTextures;
-
-/**
- * Auxiliar struct to storage sprites
- **/
-typedef struct {
-  sf::Sprite walking1;
-  sf::Sprite walking2;
-  sf::Sprite sneaking1;
-  sf::Sprite sneaking2;
-  sf::Sprite dead;
-} DinoSprites;
-
-/**
- * Auxiliar struct to storage texture dimensions
- **/
-typedef struct {
-  sf::Vector2u walking;
-  sf::Vector2u sneaking;
-  sf::Vector2u dead;
-} DinoDimensions;
-
-/**
-  * Player class
-  *
-  * The AI bot will inherit this class, and override
-  * the update function
-  **/
 class Dino {
 private:
-  DinoTextures textures;
   DinoSprites sprites;
   DinoDimensions dimensions;
 
@@ -56,6 +25,7 @@ private:
   float acceleration;
 
 public:
+  DinoTextures* textures;
   sf::Rect<float> rect;
 
   bool isAlive;
@@ -64,27 +34,28 @@ public:
   int floorHeight;
 
   /**
-  * Class constructor, that takes the floor y coordinate as its only parameter
-  *
-  * @param floorHeight scene's floor y coordinate
-  */
-  Dino(int floorHeight);
+   * Class constructor, that takes the floor y coordinate as its only parameter
+   *
+   * @param floorHeight scene's floor y coordinate
+   */
+  Dino(int floorHeight, DinoTextures* textures);
   Dino();
 
   /**
-  * Update method - this method will be called in every frame during the game loop
-  */
+   * Update method - this method will be called in every frame during the game
+   * loop
+   */
   virtual void update();
 
   /**
-  * Draw method
-  *
-  * Taking the game window as a parameter, it will render the dino's sprite on the screen.
-  * The animation is made by checking the current frame
-  *
-  * @param window the game window
-  * @param frame the current frame
-  */
+   * Draw method
+   *
+   * Taking the game window as a parameter, it will render the dino's sprite on
+   * the screen. The animation is made by checking the current frame
+   *
+   * @param window the game window
+   * @param frame the current frame
+   */
   void draw(sf::RenderWindow &window, int frame);
 
   // The following methods are the dino's actions

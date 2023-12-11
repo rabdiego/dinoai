@@ -10,7 +10,7 @@ private:
   NN::MLP* brain;
 
 public:
-  Bot(int floorHeight);
+  Bot(int floorHeight, DinoTextures* textures);
   Bot(const Bot &parent);
 
   void update(arma::mat input);

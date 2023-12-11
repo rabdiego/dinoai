@@ -1,4 +1,5 @@
 #include "SFML/Window/Keyboard.hpp"
+#include "libs/dino/include/structures.hpp"
 #include "libs/dino/include/bot.hpp"
 #include "libs/dino/include/dino.hpp"
 #include "libs/dino/include/obstacle.hpp"
@@ -17,11 +18,25 @@ int main() {
   sf::RenderWindow window(sf::VideoMode(800, 400), "Play");
   window.setFramerateLimit(60);
 
+  DinoAI::DinoTextures dinoTextures;
+  dinoTextures.walking1.loadFromFile("assets/dino/walking1.png");
+  dinoTextures.walking2.loadFromFile("assets/dino/walking2.png");
+  dinoTextures.sneaking1.loadFromFile("assets/dino/sneaking1.png");
+  dinoTextures.sneaking2.loadFromFile("assets/dino/sneaking2.png");
+  dinoTextures.dead.loadFromFile("assets/dino/dead.png");
+
+  DinoAI::ObstacleTextures obstacleTextures;
+  obstacleTextures.cactae1.loadFromFile("assets/obstacles/cactae1.png");
+  obstacleTextures.cactae2.loadFromFile("assets/obstacles/cactae2.png");
+  obstacleTextures.cactae3.loadFromFile("assets/obstacles/cactae3.png");
+  obstacleTextures.ptero1.loadFromFile("assets/obstacles/ptero1.png");
+  obstacleTextures.ptero2.loadFromFile("assets/obstacles/ptero2.png");
+
   int numberOfBots = 50;
   std::vector<DinoAI::Bot *> bots;
 
   for (int i = 0; i < numberOfBots; i++) {
-    bots.push_back(new DinoAI::Bot(350));
+    bots.push_back(new DinoAI::Bot(350, &dinoTextures));
   }
 
   std::vector<DinoAI::Obstacle *> obstacles;
@@ -40,7 +55,7 @@ int main() {
         window.close();
       } else if (allBotsDead(bots) && event.key.code == sf::Keyboard::Space) {
         for (int i = 0; i < numberOfBots; i++) {
-          bots.push_back(new DinoAI::Bot(350));
+          bots.push_back(new DinoAI::Bot(350, &dinoTextures));
         }
         obstacles = std::vector<DinoAI::Obstacle *>();
         gameVelocity = 7;
@@ -50,7 +65,7 @@ int main() {
 
     // Appending a new obstacle
     if (frame % 100 == 0) {
-      obstacles.push_back(new DinoAI::Obstacle(rng3(rng), 350, 270));
+      obstacles.push_back(new DinoAI::Obstacle(rng3(rng), 350, 270, &obstacleTextures));
     }
 
     if (frame % 1000 == 0) {

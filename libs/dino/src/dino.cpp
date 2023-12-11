@@ -3,29 +3,25 @@
 
 using namespace DinoAI;
 
-Dino::Dino(int floorHeight) {
-  textures.walking1.loadFromFile("assets/dino/walking1.png");
-  textures.walking2.loadFromFile("assets/dino/walking2.png");
-  textures.sneaking1.loadFromFile("assets/dino/sneaking1.png");
-  textures.sneaking2.loadFromFile("assets/dino/sneaking2.png");
-  textures.dead.loadFromFile("assets/dino/dead.png");
+Dino::Dino(int floorHeight, DinoTextures* textures) {
+  this->textures = textures;
 
-  dimensions.walking = textures.walking1.getSize();
-  dimensions.sneaking = textures.sneaking1.getSize();
-  dimensions.dead = textures.dead.getSize();
+  dimensions.walking = textures->walking1.getSize();
+  dimensions.sneaking = textures->sneaking1.getSize();
+  dimensions.dead = textures->dead.getSize();
 
-  sprites.walking1.setTexture(textures.walking1);
-  sprites.walking2.setTexture(textures.walking2);
-  sprites.sneaking1.setTexture(textures.sneaking1);
-  sprites.sneaking2.setTexture(textures.sneaking2);
-  sprites.dead.setTexture(textures.dead);
+  sprites.walking1.setTexture(textures->walking1);
+  sprites.walking2.setTexture(textures->walking2);
+  sprites.sneaking1.setTexture(textures->sneaking1);
+  sprites.sneaking2.setTexture(textures->sneaking2);
+  sprites.dead.setTexture(textures->dead);
 
   position = {10, (float)floorHeight - dimensions.walking.y};
   velocity = 0;
   acceleration = 0.8;
 
-  rect = sf::Rect<float>(position.x, position.y, textures.walking1.getSize().x,
-                         textures.walking1.getSize().y);
+  rect = sf::Rect<float>(position.x, position.y, textures->walking1.getSize().x,
+                         textures->walking1.getSize().y);
 
   isAlive = true;
   isSneaking = false;
@@ -45,19 +41,19 @@ void Dino::update() {
     isJumping = false;
     position.y = floorHeight - dimensions.sneaking.y;
     rect.top = position.y;
-    rect.height = textures.walking1.getSize().y;
+    rect.height = textures->walking1.getSize().y;
 
   } else if (isAlive && position.y >= floorHeight - dimensions.walking.y) {
     isJumping = false;
     position.y = floorHeight - dimensions.walking.y;
     rect.top = position.y;
-    rect.height = textures.walking1.getSize().y;
+    rect.height = textures->walking1.getSize().y;
 
   } else if (!isAlive && position.y >= floorHeight - dimensions.dead.y) {
     isJumping = false;
     position.y = floorHeight - dimensions.dead.y;
     rect.top = position.y;
-    rect.height = textures.sneaking1.getSize().y;
+    rect.height = textures->sneaking1.getSize().y;
   }
 }
 
