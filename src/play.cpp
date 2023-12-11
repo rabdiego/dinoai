@@ -30,7 +30,7 @@ int main() {
   std::random_device dev;
   std::mt19937 rng(dev());
   std::uniform_int_distribution<std::mt19937::result_type> rng3(0, 3);
-  DinoAI::Obstacle obstacle(3, 350, 260, &obstacleTextures);
+  DinoAI::Obstacle obstacle(rng3(rng), 350, 260, &obstacleTextures);
 
   while (window.isOpen()) {
     // Handling events
