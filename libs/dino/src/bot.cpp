@@ -2,13 +2,20 @@
 
 using namespace DinoAI;
 
-Bot::Bot(int floorHeight, DinoTextures* textures) : Dino(floorHeight, textures) {
-  brain = new NN::MLP(8, 16, 3);
+Bot::Bot(int floorHeight, DinoTextures *textures)
+    : Dino(floorHeight, textures) {
+  brain = new NN::MLP(7, 16, 3);
 }
 
 Bot::Bot(const Bot &parent) : Dino(parent.floorHeight, parent.textures) {
   brain = new NN::MLP(*parent.brain);
-  brain->mutation(0.1);
+  brain->mutation(0.5);
+}
+
+Bot::Bot(std::string hiddenFile, std::string outFile, int floorHeight,
+         DinoTextures *textures)
+    : Bot(floorHeight, textures) {
+  this->brain->load(hiddenFile, outFile);
 }
 
 void Bot::update(arma::mat input) {

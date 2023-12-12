@@ -1,4 +1,5 @@
 #include <armadillo>
+#include <string>
 
 #ifndef MLP_H
 #define MLP_H
@@ -76,6 +77,26 @@ public:
   int getNumInputNeurons() const;
   int getNumHiddenNeurons() const;
   int getNumOutputNeurons() const;
+
+  /**
+   * Save its information on two files:
+   * One for the hidden layer, and the other
+   * for the output layer.
+   *
+   * @param hiddenFile Filename of the hidden layer file
+   * @param outFile Filename of the output layer file
+   */
+  void save(std::string hiddenFile, std::string outFile);
+
+  /**
+   * Loads its information from two files:
+   * One for the hidden layer, and the other
+   * for the output layer.
+   *
+   * @param hiddenFile Filename of the hidden layer file
+   * @param outFile Filename of the output layer file
+   */
+  void load(std::string hiddenFile, std::string outFile);
 };
 }; // namespace NN
 

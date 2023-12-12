@@ -25,21 +25,21 @@ Obstacle::Obstacle(int id, int floorHeight, int skyHeight,
   switch (id) {
   case 0:
     position.y = (float)floorHeight - dimensions.cactae1.y;
-    rect = sf::Rect<float>(position.x + 10, position.y,
-                           textures->cactae1.getSize().x - 10,
-                           textures->cactae1.getSize().y);
+    rect = sf::Rect<float>(position.x + 6, position.y + 2,
+                           textures->cactae1.getSize().x - 6,
+                           textures->cactae1.getSize().y - 2);
     break;
   case 1:
     position.y = (float)floorHeight - dimensions.cactae2.y;
-    rect = sf::Rect<float>(position.x + 10, position.y,
+    rect = sf::Rect<float>(position.x + 10, position.y + 8,
                            textures->cactae2.getSize().x - 10,
-                           textures->cactae2.getSize().y);
+                           textures->cactae2.getSize().y - 8);
     break;
   case 2:
     position.y = (float)floorHeight - dimensions.cactae3.y;
-    rect = sf::Rect<float>(position.x + 10, position.y,
-                           textures->cactae3.getSize().x - 10,
-                           textures->cactae3.getSize().y);
+    rect = sf::Rect<float>(position.x + 25, position.y + 12,
+                           textures->cactae3.getSize().x - 25,
+                           textures->cactae3.getSize().y - 12);
     break;
   case 3:
     position.y = (float)skyHeight - dimensions.ptero.y;
@@ -58,7 +58,22 @@ Obstacle::Obstacle(int id, int floorHeight, int skyHeight,
 
 void Obstacle::update(float gameVelocity) {
   position.x -= gameVelocity;
-  rect.left = position.x;
+  switch (id) {
+  case 0:
+    rect.left = position.x + 6;
+    break;
+  case 1:
+    rect.left = position.x + 10;
+    break;
+  case 2:
+    rect.left = position.x + 25;
+    break;
+  case 3:
+    rect.left = position.x + 10;
+    break;
+  default:
+    rect.left = position.x + 10;
+  }
 }
 
 void Obstacle::draw(sf::RenderWindow &window, int frame) {

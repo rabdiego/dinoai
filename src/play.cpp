@@ -8,6 +8,7 @@ int main() {
   sf::RenderWindow window(sf::VideoMode(800, 400), "Play");
   window.setFramerateLimit(60);
 
+  // Player textures
   DinoAI::DinoTextures dinoTextures;
   dinoTextures.walking1.loadFromFile("assets/dino/walking1.png");
   dinoTextures.walking2.loadFromFile("assets/dino/walking2.png");
@@ -15,6 +16,7 @@ int main() {
   dinoTextures.sneaking2.loadFromFile("assets/dino/sneaking2.png");
   dinoTextures.dead.loadFromFile("assets/dino/dead.png");
 
+  // Obstacles textures
   DinoAI::ObstacleTextures obstacleTextures;
   obstacleTextures.cactae1.loadFromFile("assets/obstacles/cactae1.png");
   obstacleTextures.cactae2.loadFromFile("assets/obstacles/cactae2.png");
@@ -22,13 +24,17 @@ int main() {
   obstacleTextures.ptero1.loadFromFile("assets/obstacles/ptero1.png");
   obstacleTextures.ptero2.loadFromFile("assets/obstacles/ptero2.png");
 
+  // Game information
   DinoAI::Dino player(350, &dinoTextures);
   int frame = 0;
-  int gameVelocity = 5;
+  int gameVelocity = 15;
 
+  // Random number generator - used to generate obstacles
   std::random_device dev;
   std::mt19937 rng(dev());
   std::uniform_int_distribution<std::mt19937::result_type> rng3(0, 3);
+
+  // Obstacle
   DinoAI::Obstacle obstacle(rng3(rng), 350, 260, &obstacleTextures);
 
   while (window.isOpen()) {
@@ -55,13 +61,8 @@ int main() {
       } else if (event.key.code == sf::Keyboard::Space) {
         player.reborn();
         obstacle.reborn(rng3(rng));
-        gameVelocity = 5;
         frame = 0;
       }
-    }
-
-    if (gameVelocity <= 25 && frame % 500 == 0) {
-      gameVelocity += 5;
     }
 
     // Clearing the window
@@ -75,11 +76,13 @@ int main() {
     obstacle.update(gameVelocity);
     obstacle.draw(window, frame);
 
+    // Checking collisions
     if (obstacle.collidedWithDino(player)) {
       player.die();
       gameVelocity = 0;
     }
 
+    // Regenerating obstalces
     if (obstacle.getPosition().x < -80) {
       obstacle.reborn(rng3(rng));
     }

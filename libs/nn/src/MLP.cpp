@@ -44,7 +44,7 @@ void MLP::mutation(double factor) {
 int MLP::feedForward(arma::mat input) const {
   arma::mat hidden_vector = this->sigmoid(this->hidden_weights * input);
   arma::mat output_vector = this->output_weights * hidden_vector;
-  return (int) output_vector(output_vector.index_max());
+  return (int)output_vector(output_vector.index_max());
 }
 
 arma::mat MLP::getHiddenWeights() const { return this->hidden_weights; }
@@ -56,3 +56,13 @@ int MLP::getNumInputNeurons() const { return this->num_input_neurons; }
 int MLP::getNumHiddenNeurons() const { return this->num_hidden_neurons; }
 
 int MLP::getNumOutputNeurons() const { return this->num_output_neurons; }
+
+void MLP::load(std::string hiddenFile, std::string outFile) {
+  this->hidden_weights.load(hiddenFile);
+  this->output_weights.load(outFile);
+}
+
+void MLP::save(std::string hiddenFile, std::string outFile) {
+  this->hidden_weights.save(hiddenFile);
+  this->output_weights.save(outFile);
+}
