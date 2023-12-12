@@ -61,6 +61,7 @@ int main() {
       } else if (event.key.code == sf::Keyboard::Space) {
         player.reborn();
         obstacle.reborn(rng3(rng));
+        gameVelocity = 15;
         frame = 0;
       }
     }

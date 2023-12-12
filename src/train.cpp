@@ -27,8 +27,8 @@ bool allBotsDead(std::vector<std::pair<DinoAI::Bot *, int>> bots) {
 }
 
 int main() {
-  sf::RenderWindow window(sf::VideoMode(800, 400), "Play");
-  window.setFramerateLimit(600);
+  sf::RenderWindow window(sf::VideoMode(800, 400), "Train");
+  window.setFramerateLimit(60);
 
   // Bot textures
   DinoAI::DinoTextures dinoTextures;

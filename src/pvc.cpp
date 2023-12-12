@@ -6,7 +6,7 @@
 #include <random>
 
 int main() {
-  sf::RenderWindow window(sf::VideoMode(800, 400), "Play");
+  sf::RenderWindow window(sf::VideoMode(800, 800), "PvC");
   window.setFramerateLimit(60);
 
   DinoAI::DinoTextures dinoTextures;
@@ -23,14 +23,22 @@ int main() {
   obstacleTextures.ptero1.loadFromFile("assets/obstacles/ptero1.png");
   obstacleTextures.ptero2.loadFromFile("assets/obstacles/ptero2.png");
 
-  DinoAI::Bot bot("runs/0/best_hidden.bin", "runs/0/best_out.bin", 350, &dinoTextures);
+  DinoAI::Bot bot("runs/0/best_hidden.bin", "runs/0/best_out.bin", 350,
+                  &dinoTextures);
+  DinoAI::Dino player(750, &dinoTextures);
+
   int frame = 0;
   int gameVelocity = 15;
+
+  int pVelocity = gameVelocity;
+  int bVelocity = gameVelocity;
 
   std::random_device dev;
   std::mt19937 rng(dev());
   std::uniform_int_distribution<std::mt19937::result_type> rng3(0, 3);
-  DinoAI::Obstacle obstacle(rng3(rng), 350, 260, &obstacleTextures);
+  int obsId = rng3(rng);
+  DinoAI::Obstacle obstacle(obsId, 350, 260, &obstacleTextures);
+  DinoAI::Obstacle obstacle2(obsId, 750, 660, &obstacleTextures);
 
   while (window.isOpen()) {
     // Handling events
@@ -39,9 +47,29 @@ int main() {
       if (event.type == sf::Event::Closed) {
         window.close();
       }
-      if (!bot.isAlive && event.key.code == sf::Keyboard::Space) {
+      if (player.isAlive) {
+        if (event.type == sf::Event::KeyPressed) {
+          if (event.key.code == sf::Keyboard::W && player.isSneaking == false &&
+              player.isJumping == false) {
+            player.jump();
+          } else if (event.key.code == sf::Keyboard::S &&
+                     player.isJumping == false && player.isSneaking == false) {
+            player.sneak();
+          }
+        } else if (event.type == sf::Event::KeyReleased) {
+          if (event.key.code == sf::Keyboard::S && player.isSneaking == true) {
+            player.standUp();
+          }
+        }
+      } else if ((!player.isAlive || !bot.isAlive) &&
+                 event.key.code == sf::Keyboard::Space) {
         bot.reborn();
-        obstacle.reborn(rng3(rng));
+        player.reborn();
+        pVelocity = gameVelocity;
+        bVelocity = gameVelocity;
+        obsId = rng3(rng);
+        obstacle.reborn(obsId);
+        obstacle2.reborn(obsId);
         frame = 0;
       }
     }
@@ -51,30 +79,42 @@ int main() {
 
     // Updating and drawing the player
     if (bot.isAlive) {
-        arma::mat input = arma::mat(7, 1);
-        input[0] = bot.rect.top / 400;
-        input[1] = bot.rect.height / 96;
-        input[2] = obstacle.rect.left / 800;
-        input[3] = obstacle.rect.top / 280;
-        input[4] = obstacle.rect.width / 104;
-        input[5] = obstacle.rect.height / 100;
-        input[6] = (350 - obstacle.rect.top + obstacle.rect.height) / 220;
+      arma::mat input = arma::mat(7, 1);
+      input[0] = bot.rect.top / 400;
+      input[1] = bot.rect.height / 96;
+      input[2] = obstacle.rect.left / 800;
+      input[3] = obstacle.rect.top / 280;
+      input[4] = obstacle.rect.width / 104;
+      input[5] = obstacle.rect.height / 100;
+      input[6] = (350 - obstacle.rect.top + obstacle.rect.height) / 220;
 
-        bot.update(input);
+      bot.update(input);
     }
     bot.draw(window, frame);
 
+    player.update();
+    player.draw(window, frame);
+
     // Updating and drawing the obstacle
-    obstacle.update(gameVelocity);
+    obstacle.update(bVelocity);
     obstacle.draw(window, frame);
+    obstacle2.update(pVelocity);
+    obstacle2.draw(window, frame);
 
     if (obstacle.collidedWithDino(bot)) {
       bot.die();
-      gameVelocity = 0;
+      bVelocity = 0;
+    }
+
+    if (obstacle2.collidedWithDino(player)) {
+      player.die();
+      pVelocity = 0;
     }
 
     if (obstacle.getPosition().x < -80) {
-      obstacle.reborn(rng3(rng));
+      obsId = rng3(rng);
+      obstacle.reborn(obsId);
+      obstacle2.reborn(obsId);
     }
 
     window.display();
