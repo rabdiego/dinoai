@@ -1,6 +1,8 @@
 # DinoAI
 > by `rabdiego`
 
+[YouTube video](https://www.youtube.com/watch?v=XCFNLnOdcfw)
+
 ## Brief
 
 DinoAI is a personal project that aims to build a bot capable of playing the Chrome Dino game, using Machine Learning techniques.
